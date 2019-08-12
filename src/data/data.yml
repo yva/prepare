@@ -1,0 +1,25 @@
+- get_url:
+    url: "https://packages.microsoft.com/config/{{ansible_facts['distribution']|lower}}/{{ansible_facts['distribution_major_version']}}/packages-microsoft-prod.rpm"
+    dest: "/tmp/packages-microsoft-prod.rpm"
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- yum:
+    name: /tmp/packages-microsoft-prod.rpm
+    state: present
+  when: ansible_facts['os_family'] == 'RedHat'    
+
+- get_url:
+    url: "https://packages.microsoft.com/config/{{ansible_facts['distribution']|lower}}/{{ansible_facts['distribution_version']}}/packages-microsoft-prod.deb"
+    dest: "/tmp/packages-microsoft-prod.deb"
+  when: ansible_facts['os_family'] == 'Debian'
+
+- apt:
+    deb: /tmp/packages-microsoft-prod.deb
+    state: present
+  when: ansible_facts['os_family'] == 'Debian'  
+
+- name: soft 4 mount 
+  package:
+    name: 
+      - cifs-utils
+      - blobfuse

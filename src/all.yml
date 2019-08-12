@@ -1,0 +1,23 @@
+- name: test 
+  hosts: all
+  become: yes
+  tasks:
+    - debug:
+        var: ansible_facts['os_family'] 
+    - debug: 
+        var: ansible_distribution
+
+
+- import_playbook: platform/main.yml
+  when: no_common is not defined or not no_common
+
+- name: test 
+  hosts: all
+  become: yes
+  tasks:
+    - import_tasks: platform/debug.yml
+      when: debug is defined and debug
+    - import_tasks: data/data.yml
+      when: data is defined and data
+    - import_tasks: ml/ml.yml
+      when: ml is defined and ml

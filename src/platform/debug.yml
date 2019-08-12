@@ -1,4 +1,5 @@
-- package:
+- name: install debug tools
+  package:
     name: 
       - nano
       - httpie
