@@ -10,4 +10,13 @@
       - software-properties-common
       - moreutils
       - dnsutils
-
+- package: 
+    name: "{{item}}"
+    state: latest 
+  with_items:
+    - jq 
+    - bash 
+    - wget
+    - curl
+    - unzip
+    - ca-certificates

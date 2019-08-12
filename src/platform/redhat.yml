@@ -1,7 +1,6 @@
-- yum: 
-    update_cache: true
     
 - yum: 
+    update_cache: true
     name: "{{item}}"
     state: latest
   with_items: 
@@ -9,5 +8,21 @@
     - epel-release
     - device-mapper-persistent-data
     - lvm2
+- yum: 
+    update_cache: true
+    name: "{{item}}"
+    state: latest
+  with_items:     
     - bind-utils
     - moreutils
+  
+- package: 
+    name: "{{item}}"
+    state: latest 
+  with_items:
+    - jq 
+    - bash 
+    - wget
+    - curl
+    - unzip
+    - ca-certificates

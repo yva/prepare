@@ -2,16 +2,6 @@
   hosts: all
   become: yes
   tasks:
-    - package: 
-        name: "{{item}}"
-        state: latest 
-      with_items:
-        - jq 
-        - bash 
-        - wget
-        - curl
-        - unzip
-        - ca-certificates
 
     - import_tasks: ubuntu.yml
       when: ansible_facts['os_family'] == 'Debian'
