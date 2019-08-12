@@ -1,0 +1,20 @@
+- name: test 
+  hosts: all
+  become: yes
+  tasks:
+    - debug:
+        var: ansible_facts['os_family'] 
+    - debug: 
+        var: ansible_distribution
+    
+    - import_tasks: parts/common.yml
+      when: not debug or debug is not defined
+
+    - import_tasks: parts/ubuntu.yml
+      when: ansible_facts['os_family'] == 'Debian'
+    - import_tasks: parts/redhat.yml
+      when: ansible_facts['os_family'] == 'RedHat'
+
+    - import_tasks: parts/consul.yml  
+    - import_tasks: parts/docker.yml
+    - import_tasks: parts/debug.yml

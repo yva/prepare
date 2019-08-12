@@ -1,0 +1,8 @@
+- package:
+    name: 
+      - nano
+      - httpie
+      - screen
+      - mc
+      - htop
+    state: present
