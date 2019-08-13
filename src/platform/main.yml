@@ -11,3 +11,12 @@
 
     - import_tasks: consul.yml  
     - import_tasks: docker.yml
+
+    - lineinfile: dest=/etc/ssh/sshd_config regexp='^#?AcceptEnv ' line="AcceptEnv INIT_* PLATFORM_* YVA_* FINDO_*"
+      notify: restart_sshd
+  handlers:
+    - name: restart_sshd
+      service: 
+        name: sshd
+        state: restarted 
+
