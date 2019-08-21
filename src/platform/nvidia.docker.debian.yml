@@ -1,0 +1,16 @@
+- name: Debian add nvidia-docker apt key.
+  apt_key:
+    url: https://nvidia.github.io/nvidia-docker/gpgkey
+    state: present
+
+- name: Debian nvidia-docker repository.
+  shell: curl -s -L https://nvidia.github.io/nvidia-docker/{{ ansible_distribution|lower }}{{ ansible_distribution_version }}/nvidia-docker.list > /etc/apt/sources.list.d/nvidia-docker.list
+
+- name: Debian nvidia-docker repository.
+  apt:
+    update_cache: yes
+    name: 
+      - nvidia-docker2
+      - nvidia-container-runtime
+    state: latest
+  notify: restart_docker

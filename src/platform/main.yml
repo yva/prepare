@@ -12,6 +12,9 @@
     - import_tasks: consul.yml  
     - import_tasks: docker.yml
 
+    - import_tasks: nvidia.docker.debian.yml
+      when: ansible_facts['os_family'] == 'Debian' and cuda is defined and cuda
+
     - lineinfile: dest=/etc/ssh/sshd_config regexp='^#?AcceptEnv ' line="AcceptEnv INIT_* PLATFORM_* YVA_* FINDO_*"
       notify: restart_sshd
   handlers:
@@ -19,4 +22,7 @@
       service: 
         name: sshd
         state: restarted 
-
+    - name: restart_docker
+      service: 
+        name: docker
+        state: restarted   

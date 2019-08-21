@@ -1,0 +1,16 @@
+- name:  RHEL add nvidia-docker apt key.
+- rpm_key:
+    state: present
+    key: f796ecb0
+
+- name: RHEL nvidia-docker repository.
+  shell: curl -s -L https://nvidia.github.io/nvidia-docker/{{ ansible_distribution|lower }}{{ ansible_distribution_version }}/nvidia-docker.repo > /etc/yum.repos.d/nvidia-docker.repo
+
+- name: RHEL nvidia-docker update.
+  yum:
+    update_cache: yes
+    name: 
+      - nvidia-docker2
+      - nvidia-container-runtime
+    state: latest
+  notify: restart_docker
