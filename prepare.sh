@@ -8,6 +8,7 @@ while [[ $# -gt 0 ]]; do
         '--verbose') params+=('-vv');;
         '--data') params+=('--extra-vars' 'data=true');;
         '--ml') params+=('--extra-vars' 'ml=true');;
+        '--cuda') params+=('--extra-vars' 'cuda=true');;
         '--no-common') params+=('--extra-vars' 'no_common=true');;
         '--debug') params+=('--extra-vars' 'debug=true');;
         # stub 4 bash 4.3 produces empty arguments
