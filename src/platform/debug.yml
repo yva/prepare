@@ -6,4 +6,5 @@
       - screen
       - mc
       - htop
+      - datamash
     state: present
