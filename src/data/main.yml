@@ -1,0 +1,9 @@
+- name: install data pakgs 
+  hosts: all
+  become: yes
+  tasks:
+    - import_tasks: mount.pkgs.rhel.yml
+      when: ansible_facts['os_family'] == 'RedHat'    
+
+    - import_tasks: mount.pkgs.debian.yml
+      when: ansible_facts['os_family'] == 'Debian'

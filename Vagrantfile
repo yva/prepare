@@ -75,7 +75,12 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "src/all.yml"
-    ansible.raw_arguments = ["--extra-vars", "data=true",'--extra-vars','ml=true','--extra-vars','debug=true','--extra-vars','cuda=true', '-vv']
+    ansible.raw_arguments = [
+      "--extra-vars", "data=true",
+      '--extra-vars','ml=true',
+      '--extra-vars','cuda=true',
+      '--extra-vars','developer=true',
+       '-vv']
 
   end
 end

@@ -1,0 +1,13 @@
+- get_url:
+    url: "https://packages.microsoft.com/config/{{ansible_facts['distribution']|lower}}/{{ansible_facts['distribution_major_version']}}/packages-microsoft-prod.rpm"
+    dest: "/tmp/packages-microsoft-prod.rpm"
+
+- yum:
+    name: /tmp/packages-microsoft-prod.rpm
+    state: present  
+    
+- name: soft 4 mount 
+  package:
+    name: 
+      - cifs-utils
+      - blobfuse
