@@ -17,10 +17,12 @@ function get_installscripts(){
   echo "$dir"
 }
 
+cd ~
+
 # 2. get install scripts
 INIT_PLATFORM_RELEASE_URL="${INIT_PLATFORM_RELEASE_URL:-https://release.yva.ai/yva/vm/yva.vm.json}"
 tmpd="$(get_installscripts "$INIT_PLATFORM_RELEASE_URL")"
 
 # run installation with the same url 
 export INIT_PLATFORM_RELEASE_URL
-"$tmpd/${INIT_PLATFORM_INSTALL_SCENARIO:-standalone}.sh" "$@" 2>&1 | tee ~/install.out.txt
+"$tmpd/${INIT_PLATFORM_INSTALL_SCENARIO:-standalone}.sh" "$@" 2>&1 > ~/install.out.txt

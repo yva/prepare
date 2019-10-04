@@ -2,8 +2,6 @@
   hosts: all
   become: yes
   tasks:
-    - import_tasks: consul.yml  
-
     - import_tasks: nvidia.docker.debian.yml
       when: ansible_facts['os_family'] == 'Debian' and cuda is defined and cuda
 
