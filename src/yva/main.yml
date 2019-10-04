@@ -1,0 +1,36 @@
+- name: prepare user
+  hosts: all
+  become: yes
+  vars: 
+    YVA_PLATFORM_USER: "{{PLATFORM_USER|default('yva')}}"
+  tasks:
+    - user:
+        name: "{{YVA_PLATFORM_USER}}"
+        groups: docker
+        append: yes    
+    - file:
+        path: "{{INIT_PLATFORM_ROOT}}"
+        state: directory
+        owner: "{{YVA_PLATFORM_USER}}"        
+        recurse: true
+
+- name: pre-install yva from install url
+  hosts: all
+  become: yes
+  become_user: "{{YVA_PLATFORM_USER}}"
+  vars: 
+    YVA_PLATFORM_USER: "{{PLATFORM_USER|default('yva')}}"
+    INIT_PLATFORM_KV_OVERLOAD: 
+      kv: 
+        INIT_DOCKER_USER: "{{INIT_DOCKER_USER}}"
+        INIT_DOCKER_PASS: "{{INIT_DOCKER_PASS}}"
+        PLATFORM_UPDATE_URL: "{{INIT_PLATFORM_RELEASE_URL}}"
+        PLATFORM_DOCKER_CR: "{{PLATFORM_DOCKER_CR | default('cr1.yva.ai')}}"
+  environment:
+    INIT_PLATFORM_RELEASE_URL: "{{INIT_PLATFORM_RELEASE_URL}}"
+    INIT_PLATFORM_ROOT: "{{INIT_PLATFORM_ROOT | default('/srv/data') }}"
+    INIT_PLATFORM_KV_OVERLOAD: "{{INIT_PLATFORM_KV_OVERLOAD | to_json}}"
+    INIT_PLATFORM_INSTALL_SCENARIO: internal
+    PATH: "/usr/local/bin:/usr/bin:/usr/sbin"
+  tasks:
+    - script: install.sh --pre-install

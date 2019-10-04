@@ -1,6 +1,6 @@
 - name: test 
   hosts: all
-  become: yes
+  become: yes  
   tasks:
     - debug:
         var: ansible_facts['os_family'] 
@@ -9,6 +9,9 @@
 
 - import_playbook: common/main.yml
   when: no_common is not defined or not no_common
+
+- import_playbook: yva/main.yml
+  when: yva is defined and yva
 
 - import_playbook: cuda/main.yml
   when: cuda is defined and cuda
@@ -21,4 +24,3 @@
 
 - import_playbook: ml/main.yml
   when: ml is defined and ml
-

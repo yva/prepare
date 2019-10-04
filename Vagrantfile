@@ -80,6 +80,7 @@ Vagrant.configure("2") do |config|
       '--extra-vars','ml=true',
       '--extra-vars','cuda=true',
       '--extra-vars','developer=true',
+      '--extra-vars','yva=true',
        '-vv']
 
   end
