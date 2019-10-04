@@ -10,8 +10,8 @@
 - import_playbook: common/main.yml
   when: no_common is not defined or not no_common
 
-- import_playbook: platform/main.yml
-  when: no_developer is not defined or not developer
+- import_playbook: cuda/main.yml
+  when: cuda is defined and cuda
 
 - import_playbook: developer/main.yml
   when: developer is defined and developer
