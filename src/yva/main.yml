@@ -14,9 +14,10 @@
         groups: docker
         append: yes    
     - file:
-        path: "{{INIT_PLATFORM_ROOT}}"
+        path: "{{YVA_PLATFORM_ROOT}}"
         state: directory
-        owner: "{{YVA_PLATFORM_USER}}"        
+        owner: "{{YVA_PLATFORM_USER}}"  
+        mode: 0755      
         recurse: true
 
 - name: consul install
@@ -24,6 +25,18 @@
   become: yes  
   tasks:  
     - import_tasks: consul.yml
+
+- name: prepare from install url
+  hosts: all
+  become: yes
+  environment:
+    INIT_PLATFORM_RELEASE_URL: "{{INIT_PLATFORM_RELEASE_URL}}"
+    INIT_PLATFORM_ROOT: "{{YVA_PLATFORM_ROOT}}"
+    INIT_PLATFORM_INSTALL_SCENARIO: internal
+    INIT_PLATFORM_USER: "{{YVA_PLATFORM_USER}}"
+    PATH: "/usr/local/bin:/usr/bin:/usr/sbin"
+  tasks:   
+    - script: install.sh --prepare > prepare.log
 
 - name: pre-install yva from install url
   hosts: all
@@ -34,6 +47,7 @@
       kv: 
         INIT_DOCKER_USER: "{{INIT_DOCKER_USER}}"
         INIT_DOCKER_PASS: "{{INIT_DOCKER_PASS}}"
+        INIT_PLATFORM_USER: "{{YVA_PLATFORM_USER}}"
         PLATFORM_UPDATE_URL: "{{INIT_PLATFORM_RELEASE_URL}}"
         PLATFORM_DOCKER_CR: "{{PLATFORM_DOCKER_CR | default('cr1.yva.ai')}}"
   environment:
@@ -43,15 +57,13 @@
     INIT_PLATFORM_INSTALL_SCENARIO: internal
     PATH: "/usr/local/bin:/usr/bin:/usr/sbin"
   tasks:   
-    - script: install.sh --pre-install
+    - script: install.sh --pre-install > /home/{{YVA_PLATFORM_USER}}/pre-install.log
       chdir: /home/{{YVA_PLATFORM_USER}}
 
-- name: pre-install yva from install url
+- name: install yva if role set
   hosts: all
   become: yes
   become_user: "{{YVA_PLATFORM_USER}}"
-  environment:
-    DEBUG: 1
   tasks:
     - shell: source /home/{{YVA_PLATFORM_USER}}/.bash_profile; cd {{YVA_PLATFORM_ROOT}}; ./install.sh --hostrole "{{YVA_HOSTROLE}}" --force
       chdir: "{{YVA_PLATFORM_ROOT}}"
