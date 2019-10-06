@@ -1,7 +1,6 @@
 - apt:
     upgrade: yes
     update_cache: yes
-  when: not debug or debug is not defined
 
 - apt:  
     name:
@@ -20,3 +19,5 @@
     - curl
     - unzip
     - ca-certificates
+    - lsb-release
+    - gnupg

@@ -1,0 +1,87 @@
+- name: variables
+  hosts: all
+  tasks:
+    - set_fact: 
+        YVA_PLATFORM_USER: "{{PLATFORM_USER|default('yva')}}"
+        YVA_PLATFORM_ROOT: "{{INIT_PLATFORM_ROOT | default('/srv/data') }}"
+      tags:
+        - always
+
+- name: consul install
+  hosts: all
+  become: yes  
+  tasks:  
+    - import_tasks: consul.yml
+
+- name: prepare from install url
+  hosts: all
+  become: yes
+  environment:
+    INIT_PLATFORM_RELEASE_URL: "{{INIT_PLATFORM_RELEASE_URL}}"
+    INIT_PLATFORM_ROOT: "{{YVA_PLATFORM_ROOT}}"
+    INIT_PLATFORM_INSTALL_SCENARIO: internal
+    INIT_PLATFORM_USER: "{{YVA_PLATFORM_USER}}"
+    INIT_DOCKER_INSECURE_REGISTERS: "{{INIT_DOCKER_INSECURE_REGISTERS|default('')}}"
+    PATH: "/usr/local/bin:/usr/bin:/usr/sbin"
+  tasks:   
+    - script: install.sh --prepare > prepare.log 2>&1
+      tags:
+        - prepare
+
+- name: prepare user
+  hosts: all
+  become: yes
+  tasks:
+    - user:
+        name: "{{YVA_PLATFORM_USER}}"
+        groups: docker
+        append: yes    
+    - file:
+        path: "{{YVA_PLATFORM_ROOT}}"
+        state: directory
+        owner: "{{YVA_PLATFORM_USER}}"  
+        mode: 0755      
+        recurse: true
+                
+- name: pre-install yva from install url
+  hosts: all
+  become: yes
+  become_user: "{{YVA_PLATFORM_USER}}"
+  vars: 
+    INIT_PLATFORM_KV_OVERLOAD: 
+      kv: 
+        INIT_DOCKER_USER: "{{INIT_DOCKER_USER | default('')}}"
+        INIT_DOCKER_PASS: "{{INIT_DOCKER_PASS| default('')}}"        
+        INIT_PLATFORM_USER: "{{YVA_PLATFORM_USER}}"
+  environment:
+    INIT_PLATFORM_RELEASE_URL: "{{INIT_PLATFORM_RELEASE_URL}}"
+    INIT_DOCKER_INSECURE_REGISTERS: "{{INIT_DOCKER_INSECURE_REGISTERS|default('')}}"
+    INIT_PLATFORM_ROOT: "{{YVA_PLATFORM_ROOT}}"
+    INIT_PLATFORM_INSTALL_SCENARIO: internal
+    PATH: "/usr/local/bin:/usr/bin:/usr/sbin"
+
+    INIT_PLATFORM_KV_OVERLOAD: "{{INIT_PLATFORM_KV_OVERLOAD | to_json}}"
+    INIT_PLATFORM_KV_OVERLOAD2: "{{ INIT_PLATFORM_KV_OVERLOAD2 | default({}) | to_json}}"
+  tasks:
+    - debug:
+        var: INIT_PLATFORM_KV_OVERLOAD
+      tags:
+        - preinstall        
+    - script: install.sh --pre-install > /home/{{YVA_PLATFORM_USER}}/pre-install.log 2>&1
+      chdir: /home/{{YVA_PLATFORM_USER}}
+      tags:
+        - preinstall
+
+- name: install yva if role set
+  hosts: all
+  become: yes
+  become_user: "{{YVA_PLATFORM_USER}}"
+  environment:
+    PLATFORM_ROOT: "{{YVA_PLATFORM_ROOT}}"
+    PATH: "/usr/local/bin:/usr/bin:/usr/sbin"
+  tasks:       
+    - shell: cd {{YVA_PLATFORM_ROOT}}; ./install.sh --hostrole "{{YVA_HOSTROLE}}" --force 1> /home/{{YVA_PLATFORM_USER}}/install.log 2>&1 
+      chdir: "{{YVA_PLATFORM_ROOT}}"
+      when: YVA_HOSTROLE is defined
+      tags:
+        - final 

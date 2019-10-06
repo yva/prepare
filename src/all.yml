@@ -1,23 +1,26 @@
 - name: test 
   hosts: all
-  become: yes
+  become: yes  
   tasks:
     - debug:
         var: ansible_facts['os_family'] 
     - debug: 
         var: ansible_distribution
 
-
-- import_playbook: platform/main.yml
+- import_playbook: common/main.yml
   when: no_common is not defined or not no_common
 
-- name: test 
-  hosts: all
-  become: yes
-  tasks:
-    - import_tasks: platform/debug.yml
-      when: debug is defined and debug
-    - import_tasks: data/data.yml
-      when: data is defined and data
-    - import_tasks: ml/ml.yml
-      when: ml is defined and ml
+- import_playbook: yva/main.yml
+  when: yva is defined and yva
+
+- import_playbook: cuda/main.yml
+  when: cuda is defined and cuda
+
+- import_playbook: developer/main.yml
+  when: developer is defined and developer
+
+- import_playbook: data/main.yml
+  when: data is defined and data
+
+- import_playbook: ml/main.yml
+  when: ml is defined and ml
