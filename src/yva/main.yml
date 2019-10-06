@@ -7,21 +7,6 @@
       tags:
         - always
 
-- name: prepare user
-  hosts: all
-  become: yes
-  tasks:
-    - user:
-        name: "{{YVA_PLATFORM_USER}}"
-        groups: docker
-        append: yes    
-    - file:
-        path: "{{YVA_PLATFORM_ROOT}}"
-        state: directory
-        owner: "{{YVA_PLATFORM_USER}}"  
-        mode: 0755      
-        recurse: true
-
 - name: consul install
   hosts: all
   become: yes  
@@ -42,6 +27,22 @@
     - script: install.sh --prepare > prepare.log 2>&1
       tags:
         - prepare
+
+- name: prepare user
+  hosts: all
+  become: yes
+  tasks:
+    - user:
+        name: "{{YVA_PLATFORM_USER}}"
+        groups: docker
+        append: yes    
+    - file:
+        path: "{{YVA_PLATFORM_ROOT}}"
+        state: directory
+        owner: "{{YVA_PLATFORM_USER}}"  
+        mode: 0755      
+        recurse: true
+                
 - name: pre-install yva from install url
   hosts: all
   become: yes

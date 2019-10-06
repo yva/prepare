@@ -5,7 +5,7 @@
 #"centos/7"
 # "ubuntu/bionic64 "
 YVA_BOX=ENV["YVA_BOX"] || "ubuntu/bionic64"
-YVA_ADDITINAL_ANSIBLE=ENV["YVA_ADDITINAL_ANSIBLE"] || "-vv"
+YVA_ADDITINAL_ANSIBLE=ENV["YVA_ADDITINAL_ANSIBLE"] || ""
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
