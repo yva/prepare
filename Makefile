@@ -24,4 +24,4 @@ ssh:
 
 clean: _stop _rm
 
-all: clean _do local
+all: clean centos
