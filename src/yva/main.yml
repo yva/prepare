@@ -22,7 +22,7 @@
     INIT_PLATFORM_INSTALL_SCENARIO: internal
     INIT_PLATFORM_USER: "{{YVA_PLATFORM_USER}}"
     INIT_DOCKER_INSECURE_REGISTERS: "{{INIT_DOCKER_INSECURE_REGISTERS|default('')}}"
-    PATH: "/usr/local/bin:/usr/bin:/usr/sbin"
+    PATH: "/usr/local/bin:/usr/bin:/usr/sbin:/bin"
   tasks:   
     - script: install.sh --prepare > prepare.log 2>&1
       tags:
@@ -59,7 +59,7 @@
     INIT_DOCKER_INSECURE_REGISTERS: "{{INIT_DOCKER_INSECURE_REGISTERS|default('')}}"
     INIT_PLATFORM_ROOT: "{{YVA_PLATFORM_ROOT}}"
     INIT_PLATFORM_INSTALL_SCENARIO: internal
-    PATH: "/usr/local/bin:/usr/bin:/usr/sbin"
+    PATH: "/usr/local/bin:/usr/bin:/usr/sbin:/bin"
 
     INIT_PLATFORM_KV_OVERLOAD: "{{INIT_PLATFORM_KV_OVERLOAD | to_json}}"
     INIT_PLATFORM_KV_OVERLOAD2: "{{ INIT_PLATFORM_KV_OVERLOAD2 | default({}) | to_json}}"
@@ -79,7 +79,7 @@
   become_user: "{{YVA_PLATFORM_USER}}"
   environment:
     PLATFORM_ROOT: "{{YVA_PLATFORM_ROOT}}"
-    PATH: "/usr/local/bin:/usr/bin:/usr/sbin"
+    PATH: "/usr/local/bin:/usr/bin:/usr/sbin:/bin"
   tasks:       
     - shell: cd {{YVA_PLATFORM_ROOT}}; ./install.sh --hostrole "{{YVA_HOSTROLE}}" --force 1> /home/{{YVA_PLATFORM_USER}}/install.log 2>&1 
       chdir: "{{YVA_PLATFORM_ROOT}}"
