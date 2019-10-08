@@ -73,7 +73,8 @@
       tags:
         - preinstall        
     - script: install.sh --pre-install > /home/{{YVA_PLATFORM_USER}}/pre-install.log 2>&1
-      chdir: /home/{{YVA_PLATFORM_USER}}
+      args:
+        chdir: /home/{{YVA_PLATFORM_USER}}
       tags:
         - preinstall
 
@@ -86,7 +87,8 @@
     PATH: "/usr/local/bin:/usr/bin:/usr/sbin:/bin"
   tasks:       
     - shell: cd {{YVA_PLATFORM_ROOT}}; ./install.sh --hostrole "{{YVA_HOSTROLE}}" --force 1> /home/{{YVA_PLATFORM_USER}}/install.log 2>&1 
-      chdir: "{{YVA_PLATFORM_ROOT}}"
+      args:
+        chdir: "{{YVA_PLATFORM_ROOT}}"
       when: YVA_HOSTROLE is defined
       tags:
         - install 
