@@ -36,12 +36,16 @@
         name: "{{YVA_PLATFORM_USER}}"
         groups: docker
         append: yes    
+      tags:
+        - user
     - file:
         path: "{{YVA_PLATFORM_ROOT}}"
         state: directory
         owner: "{{YVA_PLATFORM_USER}}"  
         mode: 0755      
         recurse: true
+      tags:
+        - user        
                 
 - name: pre-install yva from install url
   hosts: all
@@ -85,4 +89,4 @@
       chdir: "{{YVA_PLATFORM_ROOT}}"
       when: YVA_HOSTROLE is defined
       tags:
-        - final 
+        - install 
