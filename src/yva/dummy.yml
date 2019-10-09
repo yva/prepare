@@ -1,0 +1,46 @@
+- lineinfile: 
+    dest: /etc/modules-load.d/dummy.conf
+    create: yes
+    line: dummy
+
+- lineinfile: 
+    dest: /etc/modprobe.d/dummy.conf
+    create: yes
+    line: install dummy /sbin/modprobe --ignore-install dummy; /sbin/ip link {{ 'add' if ansible_os_family == "Debian" else 'set'}} name dummy0 dev dummy0
+
+- set_fact:
+    NETPLAN_CONFIG: 
+      network:
+        version: 2
+        renderer: networkd
+        bridges:
+          dummy0:
+            dhcp4: no
+            dhcp6: no
+            accept-ra: no
+            interfaces: [ ]
+            addresses:
+              - 169.254.1.1/24
+    IFCFG_CONFIG: |
+      NAME=dummy0
+      DEVICE=dummy0
+      IPADDR=169.254.1.1
+      NETMASK=255.255.255.0
+      ONBOOT=yes
+      TYPE=Ethernet
+      NM_CONTROLLED=no
+
+- copy:
+    dest: /etc/netplan/55.yva.dummy.yaml
+    content: "{{NETPLAN_CONFIG|to_yml}}"
+  when: ansible_facts['os_family'] == 'Debian'
+- shell: netplan apply
+  when: ansible_facts['os_family'] == 'Debian'
+
+- copy:
+    dest: /etc/sysconfig/network-scripts/ifcfg-dummy0
+    content: "{{IFCFG_CONFIG}}"
+  when: ansible_facts['os_family'] == 'RedHat'
+- script: create.dummyif.sh
+  when: ansible_facts['os_family'] == 'RedHat'
+

@@ -1,12 +1,16 @@
 - set_fact:
-    consul_version: 1.0.7
+    consul_version: "{{INSTALL_CONSUL_VERSION | default('1.0.7')}}"
+- set_fact:    
+    consul_def_url: "https://releases.hashicorp.com/consul/{{consul_version}}/consul_{{consul_version}}_linux_amd64.zip"    
+- set_fact:
     consul_bin_dir: /usr/bin
+    consul_url: "{{INSTALL_CONSUL_URL | default(consul_def_url)}}"
 - get_url:
-    url: "https://releases.hashicorp.com/consul/{{consul_version}}/consul_{{consul_version}}_linux_amd64.zip"
+    url: "{{consul_url}}"
     dest: "/tmp/consul_{{consul_version}}.zip"
     validate_certs: no
 - unarchive:
     src: "/tmp/consul_{{consul_version}}.zip"
     dest: "{{consul_bin_dir}}"
     remote_src: yes
-    creates: "{{consul_bin_dir}}/consul" 
+#    creates: "{{consul_bin_dir}}/consul" 

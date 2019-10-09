@@ -8,19 +8,31 @@
         var: ansible_distribution
 
 - import_playbook: common/main.yml
-  when: no_common is not defined or not no_common
+  when: no_common is not defined or not no_common|bool
+  tags: 
+    - common
 
 - import_playbook: yva/main.yml
-  when: yva is defined and yva
+  when: yva is defined and yva|bool
+  tags: 
+    - yva
 
 - import_playbook: cuda/main.yml
-  when: cuda is defined and cuda
+  when: cuda is defined and cuda|bool
+  tags: 
+    - cuda
 
 - import_playbook: developer/main.yml
-  when: developer is defined and developer
+  when: developer is defined and developer|bool
+  tags: 
+    - developer
 
 - import_playbook: data/main.yml
-  when: data is defined and data
+  when: data is defined and data|bool
+  tags: 
+    - data
 
 - import_playbook: ml/main.yml
-  when: ml is defined and ml
+  when: ml is defined and ml|bool
+  tags: 
+    - ml

@@ -61,6 +61,32 @@ $PLATFORM_ROOT/install.sh --hostrole application
 $PLATFORM_ROOT/install.sh --hostrole stanadlone
 ```
 
+## Process configuration available
+### Scenarious avalilable by setup variables
+  ```bash
+    # example, how to install cuda docker environment
+    ansible-playbook all.yml -i yva.ini --extra-vars cuda=true
+  ```
+  
+  * *no_common=true* - don't install common packages
+  * *yva* - install yva platform
+  * *cuda* - install cuda docker environment
+  * *ml* - install ml engeneer environment
+
+### Install options by tags 
+  ```bash
+    # example, how to install cuda docker environment
+    ansible-playbook all.yml -i yva.ini --extra-vars yva=true --skip-tags=install-docker
+  ```
+
+  * *install-docker* tag for docker install procedure
+  * *install-consul* install consul from internet
+  * 
+### Install options by variables
+  
+  * *INSTALL_CONSUL_URL* URL 4 consul download
+
+
 ## Debug scenarios
 
 Create *src/yva/group_vars/all*, ther  *.gitignore*  already

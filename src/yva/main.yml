@@ -12,6 +12,16 @@
   become: yes  
   tasks:  
     - import_tasks: consul.yml
+      tags: 
+        - install-consul
+
+- name: dummy install
+  hosts: all
+  become: yes  
+  tasks:  
+    - import_tasks: dummy.yml
+      tags: 
+        - install-dummy                
 
 - name: prepare from install url
   hosts: all
@@ -27,7 +37,7 @@
     - script: install.sh --prepare > prepare.log 2>&1
       tags:
         - prepare
-
+        
 - name: prepare user
   hosts: all
   become: yes
