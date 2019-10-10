@@ -64,6 +64,10 @@
   vars: 
     INIT_PLATFORM_KV_OVERLOAD: 
       kv: 
+        PLATFORM_CONSUL_JOIN: "{{ PLATFORM_CONSUL_JOIN | default('169.254.1.1') }}"
+        PLATFORM_CONSUL_EXPECT: "{{ PLATFORM_CONSUL_EXPECT | default('1') }}"
+        PLATFORM_IFS_DEFUALT_LIST: "{{ PLATFORM_IFS_DEFUALT_LIST | default('dummy') }}"
+        PLATFORM_SERVICE_PUBLIC_IFS: "{{ PLATFORM_SERVICE_PUBLIC_IFS | default('bond en eth')}}"
         INIT_DOCKER_USER: "{{INIT_DOCKER_USER | default('')}}"
         INIT_DOCKER_PASS: "{{INIT_DOCKER_PASS| default('')}}"        
         INIT_PLATFORM_USER: "{{YVA_PLATFORM_USER}}"
