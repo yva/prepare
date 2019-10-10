@@ -32,7 +32,7 @@
 
 - copy:
     dest: /etc/netplan/55.yva.dummy.yaml
-    content: "{{NETPLAN_CONFIG|to_yml}}"
+    content: "{{NETPLAN_CONFIG|to_yaml}}"
   when: ansible_facts['os_family'] == 'Debian'
 - shell: netplan apply
   when: ansible_facts['os_family'] == 'Debian'
