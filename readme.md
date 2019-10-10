@@ -44,8 +44,6 @@ host0.internal.wlan YVA_HOSTROLE=standalone
 ansible-playbook all.yml -i yva.ini
 ```
 
-
-
 ## Manual install
 
 In case you don't set YVA_HOSTROLE , it will be pre-installed. Ater that its possible to install yva manually host by host
@@ -67,7 +65,7 @@ $PLATFORM_ROOT/install.sh --hostrole stanadlone
     # example, how to install cuda docker environment
     ansible-playbook all.yml -i yva.ini --extra-vars cuda=true
   ```
-  
+
   * *no_common=true* - don't install common packages
   * *yva* - install yva platform
   * *cuda* - install cuda docker environment
@@ -83,9 +81,12 @@ $PLATFORM_ROOT/install.sh --hostrole stanadlone
   * *install-consul* install consul from internet
   * 
 ### Install options by variables
-  
-  * *INSTALL_CONSUL_URL* URL 4 consul download
 
+  * *INSTALL_CONSUL_URL*:  URL 4 consul download, default is https://releases.hashicorp.com/consul/1.0.7/consul_1.0.7_linux_amd64.zip
+  * *PLATFORM_CONSUL_CLUSTER_IFS*: interface which consul use for internal cluster communication (first available interface by default)
+  * *PLATFORM_CONSUL_AGENT_IFS*: interface which consul use for on host communication (dummy by default)
+  * *PLATFORM_SERVICE_BIND_IFS*: interface which our internal services use for communications ( usually === *PLATFORM_CONSUL_CLUSTER_IFS*)
+  * *PLATFORM_SERVICE_PUBLIC_IFS*  interface which is binded only by front-end service, its used by end users for using the platform
 
 ## Debug scenarios
 
