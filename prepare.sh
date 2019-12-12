@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -eu -o pipefail
 [ -z "${DEBUG:-}" ] || set -x
 

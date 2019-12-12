@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # сценарии для внутренних инсталляций, для vm, vagrant & so-on 
 set -eu -o pipefail
 
