@@ -1,14 +1,15 @@
 MKFILE_DIR:=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 OPT :=
+BOX := centos/7
 
-ubuntu: export YVA_BOX=ubuntu/bionic64
+ubuntu: BOX=ubuntu/bionic64
 ubuntu: _do
 
-centos: export YVA_BOX=centos/7
+centos: BOX=centos/7
 centos: _do
 
 _do:
-	vagrant up --provision
+	YVA_BOX=$(BOX) vagrant up --provision
 
 _stop:
 	@echo "###\n### Stopping vm\n###"
